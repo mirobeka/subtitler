@@ -17,15 +17,15 @@ def dl_zip(url):
     # print mother fucking message
     print "downloading "
 
+    # check if we have actual zip file.
+    if 'zip' not in remote.info()['content-type']:
+      # screw this...
+      print 'zip file not found on this url \n\t' + url
+      return False
+
     # create mother fucking file name
     local_file_name = url.split('/').pop()+'.zip'
     with open(BASE_DOWNLOAD_DIRECTORY + local_file_name, 'wb') as local_file:
-      # check if we have actual zip file.
-      if 'zip' not in remote.info()['content-type']:
-        # screw this...
-        print 'zip file not found on this url \n\t' + url
-        return False
-
       # TODO: extract just mother fucking subtitles from mother fucking zip file
 
       # save this mother fucking file
@@ -40,10 +40,11 @@ def dl_zip(url):
   print 'got you bitch! \n\t' + url
   return True
 
-def give_me_permutation(i):
+def give_me_permutations():
   # don't look for elegance, this is not priority :D
   letters = list('01234456789')
-  return '469'+[a+b+c+d for a in letters for b in letters for c in letters for d in letters for e in letters ][i]
+  mf_perm = ['469'+a+b+c+d for a in letters for b in letters for c in letters for d in letters for e in letters]
+  return mf_perm
 
 def trial_error(ulfl = []):
   # If we have some usefull information from previous tries, like correct urls, we can use those mother fucking urls
@@ -52,11 +53,14 @@ def trial_error(ulfl = []):
   for url in usefull_list_for_later:
     dl_zip(url)
 
+  # prepare all mother fucking url endings   http://dl.open ... /sub/*******
+  permutations = give_me_permutations()
+
   # it's 3am, I don't have time to write nice code...
   index = 0
   count = 0
   while count < MAX_COUNT:
-    file_url = BASE_DOWNLOAD_URL + give_me_permutation(index)
+    file_url = BASE_DOWNLOAD_URL + permutations[index]
     if file_url not in usefull_list_for_later:
       if dl_zip(file_url):
         usefull_list_for_later.append(file_url)
