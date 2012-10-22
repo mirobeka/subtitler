@@ -1,3 +1,4 @@
+import os
 from urllib2 import urlopen, URLError, HTTPError
 
 # few mother fucking constants
@@ -25,6 +26,12 @@ def dl_zip(url):
 
     # create mother fucking file name
     local_file_name = url.split('/').pop()+'.zip'
+
+    # check if this stupid './down/' directory exists
+    if not os.path.exists(BASE_DOWNLOAD_DIRECTORY):
+      os.makedirs(BASE_DOWNLOAD_DIRECTORY)
+
+    # write shit into mother fucking file
     with open(BASE_DOWNLOAD_DIRECTORY + local_file_name, 'wb') as local_file:
       # TODO: extract just mother fucking subtitles from mother fucking zip file
 
