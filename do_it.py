@@ -1,8 +1,13 @@
-import os
 from urllib2 import urlopen, URLError, HTTPError
 
+# few mother fucking constants
 BASE_DOWNLOAD_DIRECTORY = './down/'
 BASE_DOWNLOAD_URL = 'http://dl.opensubtitles.org/en/download/sub/'
+MAX_COUNT = 10
+
+# set apropriate value if you want to use mother fucking file with urls
+# TODO: something is wrong with using this, I don't recommend
+USE_URL_FILE = False
 
 def dl_zip(url):
   try:
@@ -10,7 +15,7 @@ def dl_zip(url):
     remote = urlopen(url)
 
     # print mother fucking message
-    print "downloading " + url
+    print "downloading "
 
     # create mother fucking file name
     local_file_name = url.split('/').pop()+'.zip'
@@ -44,10 +49,13 @@ def trial_error(ulfl = []):
   # If we have some usefull information from previous tries, like correct urls, we can use those mother fucking urls
   usefull_list_for_later = ulfl
 
+  for url in usefull_list_for_later:
+    dl_zip(url)
+
   # it's 3am, I don't have time to write nice code...
   index = 0
   count = 0
-  while count < 10:
+  while count < MAX_COUNT:
     file_url = BASE_DOWNLOAD_URL + give_me_permutation(index)
     if file_url not in usefull_list_for_later:
       if dl_zip(file_url):
@@ -70,7 +78,9 @@ def save_usefull_list(ulfl):
       f.write(url + '\n')
 
 if __name__ == '__main__':
-  ulfl = load_usefull_list()
+  ulfl = [] 
+  if USE_URL_FILE:
+    ulfl = load_usefull_list()
   extended_list = trial_error(ulfl)
   save_usefull_list(extended_list)
 
